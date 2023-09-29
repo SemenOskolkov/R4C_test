@@ -33,6 +33,7 @@ def fill_robots_json(request):
         
         
 def report_robot_excel(request):
+    '''Cоздание и отправка файла в формате Excel (XLSX)'''
     generate_robot_summary(response)
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename=robot_summary.xlsx'

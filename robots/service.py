@@ -5,7 +5,7 @@ from robots.models import Robot
 
 
 def generate_robot_summary(response):
-    
+    '''Cоздание и заполнение файла Excel данными о суммарных показателях производства роботов за последнюю неделю.'''
     end_date = timezone.now()
     start_date = end_date - timezone.timedelta(days=7)
     
@@ -23,7 +23,7 @@ def generate_robot_summary(response):
         ).aggregate(total_quantity=robots.Sum('quantity'))
         ws.append([robot.model, robot.version, data['total_quantity']])
         
-    default_sheet = wb['Sheet']
+    default_sheet = wb['Sheet']  # Удаление листа по умолчению
     wb.remove(default_sheet)
 
     wb.save(response)

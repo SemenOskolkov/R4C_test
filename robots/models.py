@@ -16,7 +16,12 @@ class Robot(models.Model):
     
 @receiver(post_save, sender=Robot)
 def send_notification(sender, instance, **kwargs):
-    if instance.quantity > 0:
+    '''Сигнал на изменеие модели и проверки значения quantity'''
+    if hasattr(instance, '_previous_quantity'):
+        previous_quantity = instance._previous_quantity
+    else:
+        previous_quantity = 0
+    if previous_quantity == 0 and instance.quantity > 0:
         matching_orders = Order.objects.filter(robot_serial=f"{instance.model}-{instance.version}")
         email_addresses = [order.customer.email for order in matching_orders]
         generate_letter_and_send_mail(email_addresses, instance.model, instance.version)
